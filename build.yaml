@@ -9,25 +9,23 @@ builders:
   dirk_code_builder:
     import: "package:dirk/builder.dart"
     builder_factories: ["dirkCodeBuilder"]
-    build_extensions: 
-      '$lib$': [".dirk.dart"]
+    build_extensions: {'.dirk.html': ['.dirk.dart']}
     auto_apply: dependents
     build_to: source
     runs_before: ["dirkExportBuilder"]
     defaults:
+      generate_for: ['lib/views/**']
       options:
-        input_folder: lib/views/
-        output_folder: lib/views/code/
         start_file: _start.dirk.html
         layout_file: layout.dirk.html
   dirk_export_builder:
     import: "package:dirk/builder.dart"
     builder_factories: ["dirkExportBuilder"]
-    build_extensions: 
-      'lib/$lib$': ["views/code/views.dirk.dart"]
+    build_extensions: {'lib/$lib$': ['.dirk.dart']}
     auto_apply: dependents
     build_to: source
     defaults:
+      generate_for: ['lib/views/**']
       options:
         output_folder: lib/views/code/
         export_file: views.dirk.dart
