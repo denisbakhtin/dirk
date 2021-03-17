@@ -9,18 +9,18 @@ import 'utility.dart';
 const String _outputFileExtension = '.dirk.dart';
 
 class DirkCodeGenerator implements Builder {
-  String _start;
-  String _layout;
-  Map<String, dynamic> _options;
-  List<String> _ignoreFiles;
+  late String _start;
+  late String _layout;
+  late Map<String, dynamic> _options;
+  late List<String> _ignoreFiles;
 
   DirkCodeGenerator(BuilderOptions builderOptions) {
     _options = builderOptions.config;
     print("OPTIONS: $_options");
     _start = File('${_options["input_folder"]}${_options["start_file"]}')
-        ?.readAsStringSync();
+        .readAsStringSync();
     _layout = File('${_options["input_folder"]}${_options["layout_file"]}')
-        ?.readAsStringSync();
+        .readAsStringSync();
     _ignoreFiles = [_options["start_file"], _options["layout_file"]];
   }
 

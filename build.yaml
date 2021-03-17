@@ -1,31 +1,8 @@
-targets:
-  $default:
-    builders:
-      dirk_code_builder:
-        enabled: True
-      dirk_export_builder:
-        enabled: True
 builders:
-  dirk_code_builder:
+  viewsBuilder:
     import: "package:dirk/builder.dart"
-    builder_factories: ["dirkCodeBuilder"]
-    build_extensions: {'.dirk.html': ['.dirk.dart']}
+    builder_factories: ["viewsBuilder"]
+    build_extensions: {".dart": ["views.g.part"]}
     auto_apply: dependents
-    build_to: source
-    runs_before: ["dirkExportBuilder"]
-    defaults:
-      generate_for: ['lib/views/**']
-      options:
-        start_file: _start.dirk.html
-        layout_file: layout.dirk.html
-  dirk_export_builder:
-    import: "package:dirk/builder.dart"
-    builder_factories: ["dirkExportBuilder"]
-    build_extensions: {'lib/$lib$': ['.dirk.dart']}
-    auto_apply: dependents
-    build_to: source
-    defaults:
-      generate_for: ['lib/views/**']
-      options:
-        output_folder: lib/views/code/
-        export_file: views.dirk.dart
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]

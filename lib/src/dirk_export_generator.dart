@@ -3,8 +3,8 @@ import 'package:path/path.dart';
 import 'package:glob/glob.dart';
 
 class DirkExportGenerator implements Builder {
-  Glob _allGeneratedViews;
-  Map<String, dynamic> _options;
+  late Glob _allGeneratedViews;
+  late Map<String, dynamic> _options;
 
   DirkExportGenerator(BuilderOptions builderOptions) {
     _options = builderOptions.config;
