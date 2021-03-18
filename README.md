@@ -1,6 +1,6 @@
 # Dirk - a view engine for dart inspired by c# ASP Razor
 
-Under development, more documentation coming soon.
+Under development.
 
 ## Installation
 
