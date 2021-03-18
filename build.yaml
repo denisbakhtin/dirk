@@ -20,4 +20,4 @@ builders:
     defaults:
       options:
         output_folder: lib/views/
-        export_file: views.dart
+        output_file: views.dart

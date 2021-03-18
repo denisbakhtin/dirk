@@ -224,72 +224,8 @@ my@@email.com''')..parse();
     expect(ast.tree[0].content, "<html> <body> Sparta this is! ");
   });
 
-  test('prepends _start', () {
-    var ast = DirkAST(start: '''@import 'dart:math' as math;
-@{
-  layout = "shared/layout.dirk.dart";
-}''', contents: '''<html>
-<body>
-    Sparta this is!
-</body>
-</html>''')..parse();
-
-    expect(ast.errors.length, 0);
-    expect(ast.tree[0].type, TokenType.$import);
-    expect(ast.tree[0].content, ''''dart:math' as math''');
-
-    expect(ast.tree[1].type, TokenType.block);
-    expect(ast.tree[1].content, '''layout = "shared/layout.dirk.dart";''');
-
-    expect(ast.tree[2].type, TokenType.text);
-    expect(
-        ast.tree[2].content, " <html> <body> Sparta this is! </body> </html>");
-  });
-
-  test('uses layout', () {
-    var ast = DirkAST(
-      layout: '''<html>
-<body>
-    @renderBody()
-</body>
-</html>''',
-      contents: "Sparta this is!",
-    )..parse();
-
-    expect(ast.errors.length, 0);
-    expect(ast.tree[0].type, TokenType.text);
-    expect(
-        ast.tree[0].content, "<html> <body> Sparta this is! </body> </html>");
-  });
-
-  test('partials being processed', () {
-    var ast = DirkAST(
-      start: '''@import 'dart:math';''',
-      layout: '''<html>
-<body>
-    @renderBody()
-</body>
-</html>''',
-      contents: "Sparta this is!",
-      isPartial: true,
-    )..parse();
-
-    expect(ast.errors.length, 0);
-    expect(ast.tree[0].type, TokenType.text);
-    expect(ast.tree[0].content, "Sparta this is!",
-        reason: "Partials ignore layout and _start files");
-  });
-
   test('@renderPartial works in any view/layout', () {
     var ast = DirkAST(
-      layout: '''
-<html>
-    @renderPartial("_header")
-    <body>
-        @renderBody()
-    </body>
-</html>
-    ''',
       contents: '''
 <p>Sparta this is!</p>
 <p>@renderPartial("_body", 12)</p>
@@ -298,9 +234,92 @@ my@@email.com''')..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[1].type, TokenType.partial);
-    expect(ast.tree[1].content, '"_header"');
+    expect(ast.tree[1].content, '"_body", 12');
+  });
 
-    expect(ast.tree[3].type, TokenType.partial);
-    expect(ast.tree[3].content, '"_body", 12');
+  test('generates View function', () {
+    var ast = DirkAST(
+      contents: '''<html>
+<body>
+    Best text
+</body>
+</html>''',
+    )..parse();
+
+    expect(ast.errors.length, 0);
+
+    var vfunc = ast.toViewFunction("IndexView");
+    expect(ast.errors.length, 0);
+    expect(RegExp(r'String IndexView\(\) \{').hasMatch(vfunc), true,
+        reason: vfunc);
+  });
+
+  test('generates View function with parameter', () {
+    var ast = DirkAST(
+      contents: '''@model int;
+<html>
+  <body>
+      Best text
+  </body>
+</html>''',
+    )..parse();
+
+    expect(ast.errors.length, 0);
+
+    var vfunc = ast.toViewFunction("IndexView");
+    expect(ast.errors.length, 0);
+    expect(
+        RegExp(r'String IndexView\(int model\) \{[.]*').hasMatch(vfunc), true,
+        reason: vfunc);
+  });
+
+  test('View function wraps result with layout', () {
+    var ast = DirkAST(
+      contents: '''<html>
+  <body>
+      Best text
+  </body>
+</html>''',
+    )..parse();
+
+    expect(ast.errors.length, 0);
+
+    var vfunc = ast.toViewFunction("IndexView");
+    expect(ast.errors.length, 0);
+    expect(RegExp(r'return LayoutView\(res\);').hasMatch(vfunc), true,
+        reason: vfunc);
+  });
+
+  test('LayoutView function does not wrap result with layout', () {
+    var ast = DirkAST(
+      contents: '''<html>
+  <body>
+      Best text
+  </body>
+</html>''',
+    )..parse();
+
+    expect(ast.errors.length, 0);
+
+    var vfunc = ast.toViewFunction("LayoutView");
+    expect(ast.errors.length, 0);
+    expect(RegExp(r'return res;').hasMatch(vfunc), true, reason: vfunc);
+  });
+
+  test('Partial view function does not wrap result with layout', () {
+    var ast = DirkAST(
+      contents: '''<html>
+  <body>
+      Best text
+  </body>
+</html>''',
+      isPartial: true,
+    )..parse();
+
+    expect(ast.errors.length, 0);
+
+    var vfunc = ast.toViewFunction("PartialHeaderView");
+    expect(ast.errors.length, 0);
+    expect(RegExp(r'return res;').hasMatch(vfunc), true, reason: vfunc);
   });
 }

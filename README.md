@@ -17,7 +17,7 @@ dev_dependencies:
 
 ## Usage
 
-Normally `dirk` operates on a `lib/views` folder, this can be configured, but not tested yet. 
+Normally `dirk` operates on a `lib/views` folder, this can be configured, but not tested. 
 There are some conventions: 
 - all views must have a `.dirk.html` extention
 - the main layout file should be named `layout.dirk.html` and contain a `@renderBody()` placeholder, where the rendered view will be inserted

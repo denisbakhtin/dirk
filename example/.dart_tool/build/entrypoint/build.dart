@@ -24,7 +24,7 @@ final _builders = <_i1.BuilderApplication>[
       _i1.toDependentsOf(r'dirk'),
       hideOutput: false,
       defaultOptions: _i4.BuilderOptions(
-          {'output_folder': 'lib/views/', 'export_file': 'views.dart'})),
+          {'output_folder': 'lib/views/', 'output_file': 'views.dart'})),
   _i1.apply(r'source_gen:combining_builder', [_i5.combiningBuilder],
       _i1.toNoneByDefault(),
       hideOutput: false, appliesBuilders: const [r'source_gen:part_cleanup']),

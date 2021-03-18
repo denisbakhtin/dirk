@@ -5,5 +5,5 @@ import 'src/dirk_views_generator.dart';
 //Generates *.dirk.dart based on *.dirk.html
 Builder dirkCodeBuilder(BuilderOptions options) => DirkCodeGenerator(options);
 
-//Generates views.dart that exports all files above
+//Generates views.dart that combines all the above files
 Builder dirkViewsBuilder(BuilderOptions options) => DirkViewsGenerator(options);
