@@ -1,5 +1,4 @@
-//import 'package:todo_reporter_generator/annotations.dart';
-import 'views/code/views.dirk.dart';
+import 'views/views.dart';
 
 class Todo {
   @override

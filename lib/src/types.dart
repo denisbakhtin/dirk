@@ -16,8 +16,8 @@ class Token {
   TokenType type;
   String content;
   List<Token> children;
-  Token(this.type, this.content, {this.children}) {
-    children ??= List<Token>.empty(growable: true);
+  Token(this.type, this.content, {this.children = const []}) {
+    children = List<Token>.from(children, growable: true);
   }
 
   @override
@@ -55,9 +55,9 @@ class Token {
           if (!rPartialName.hasMatch(parts.first))
             throw DirkException(
                 "Wrong partial name. Must be an alpha-numeric string in quotes");
-          var name = rPartialName.firstMatch(parts.first).group(1);
+          var name = rPartialName.firstMatch(parts.first)?.group(1);
           var result = "res += '''\${";
-          result += fileNameToView(name);
+          result += fileNameToView(name ?? "");
           result += parts.length > 1 ? '(${parts.last.trim()})' : '()';
           result += "}''';";
           return result;
@@ -81,13 +81,13 @@ class DirkException {
 
 class DirkError extends Error {
   final String message;
-  final FileSpan span;
+  final FileSpan? span;
 
   DirkError(this.message, this.span);
 
   @override
   String toString() {
-    return 'error: ${span.start.toolString}: $message\n' +
-        span.highlight(color: true);
+    return 'error: ${span?.start.toolString}: $message\n' +
+        (span?.highlight(color: true) ?? "");
   }
 }

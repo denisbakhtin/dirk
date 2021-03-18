@@ -7,31 +7,31 @@
 
 import 'package:build_runner_core/build_runner_core.dart' as _i1;
 import 'package:dirk/builder.dart' as _i2;
-import 'package:build/build.dart' as _i3;
-import 'dart:isolate' as _i4;
-import 'package:build_runner/build_runner.dart' as _i5;
-import 'dart:io' as _i6;
+import 'package:build_config/build_config.dart' as _i3;
+import 'package:build/build.dart' as _i4;
+import 'package:source_gen/builder.dart' as _i5;
+import 'dart:isolate' as _i6;
+import 'package:build_runner/build_runner.dart' as _i7;
+import 'dart:io' as _i8;
 
 final _builders = <_i1.BuilderApplication>[
-  _i1.apply(r'dirk:dirk_code_builder', [_i2.dirkCodeBuilder],
+  _i1.apply(r'dirk:dirkCodeBuilder', [_i2.dirkCodeBuilder],
+      _i1.toDependentsOf(r'dirk'),
+      hideOutput: true,
+      defaultGenerateFor: const _i3.InputSet(include: [r'lib/views/**']),
+      defaultOptions: _i4.BuilderOptions({'input_folder': 'lib/views/'})),
+  _i1.apply(r'dirk:dirkViewsBuilder', [_i2.dirkViewsBuilder],
       _i1.toDependentsOf(r'dirk'),
       hideOutput: false,
-      defaultOptions: _i3.BuilderOptions({
-        'input_folder': 'lib/views/',
-        'output_folder': 'lib/views/code/',
-        'start_file': '_start.dirk.html',
-        'layout_file': 'layout.dirk.html'
-      })),
-  _i1.apply(r'dirk:dirk_export_builder', [_i2.dirkExportBuilder],
-      _i1.toDependentsOf(r'dirk'),
-      hideOutput: false,
-      defaultOptions: _i3.BuilderOptions({
-        'output_folder': 'lib/views/code/',
-        'export_file': 'views.dirk.dart'
-      }))
+      defaultOptions: _i4.BuilderOptions(
+          {'output_folder': 'lib/views/', 'export_file': 'views.dart'})),
+  _i1.apply(r'source_gen:combining_builder', [_i5.combiningBuilder],
+      _i1.toNoneByDefault(),
+      hideOutput: false, appliesBuilders: const [r'source_gen:part_cleanup']),
+  _i1.applyPostProcess(r'source_gen:part_cleanup', _i5.partCleanup)
 ];
-void main(List<String> args, [_i4.SendPort sendPort]) async {
-  var result = await _i5.run(args, _builders);
+void main(List<String> args, [_i6.SendPort sendPort]) async {
+  var result = await _i7.run(args, _builders);
   sendPort?.send(result);
-  _i6.exitCode = result;
+  _i8.exitCode = result;
 }
