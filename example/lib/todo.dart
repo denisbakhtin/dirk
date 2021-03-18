@@ -1,13 +1,8 @@
-//import 'views/code/views.dirk.dart';
-import 'package:dirk/annotations.dart';
+import 'views/views.dart';
 
-part 'todo.g.dart';
-
-@DirkViews("lib/views/")
 class Todo {
   @override
   String toString() {
-    return "";
-    //return "IndexView()";
+    return IndexView();
   }
 }

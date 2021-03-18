@@ -17,9 +17,11 @@ String tryFormatCode(String code) {
 //index.dirk.dart -> IndexView
 //_header.dirk.dart -> PartialHeaderView
 //Works for file name even without extention
-String fileNameToView(String name) {
+//prefix should be already in PascalCase
+String fileNameToView(String name, {String prefix = ''}) {
   final nameWithoutExtension = name.split('.').first;
   return (isPartial(name) ? "Partial" : "") +
+      prefix +
       ReCase(nameWithoutExtension).pascalCase +
       "View";
 }
@@ -28,3 +30,9 @@ String fileNameToView(String name) {
 bool isPartial(String name) {
   return name.startsWith("_");
 }
+
+String emptyLayoutFunction() => '''
+String LayoutView(String model) {
+  return model;
+}
+''';

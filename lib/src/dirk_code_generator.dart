@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:build/build.dart';
 import 'package:path/path.dart' as p;
+import 'package:recase/recase.dart';
 
 import 'dirk_ast.dart';
 import 'utility.dart';
@@ -9,19 +8,12 @@ import 'utility.dart';
 const String _outputFileExtension = '.dirk.dart';
 
 class DirkCodeGenerator implements Builder {
-  late String _start;
-  late String _layout;
   late Map<String, dynamic> _options;
-  late List<String> _ignoreFiles;
+  late String _inputFolder;
 
   DirkCodeGenerator(BuilderOptions builderOptions) {
     _options = builderOptions.config;
-    print("OPTIONS: $_options");
-    _start = File('${_options["input_folder"]}${_options["start_file"]}')
-        .readAsStringSync();
-    _layout = File('${_options["input_folder"]}${_options["layout_file"]}')
-        .readAsStringSync();
-    _ignoreFiles = [_options["start_file"], _options["layout_file"]];
+    _inputFolder = p.normalize(_options["input_folder"]);
   }
 
   @override
@@ -31,19 +23,27 @@ class DirkCodeGenerator implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    print(buildStep.inputId);
     final fileNameWithExtension =
         buildStep.inputId.pathSegments.last.replaceAll('-', '_');
 
-    if (_ignoreFiles.contains(fileNameWithExtension)) return;
-
     final rawContents = await buildStep.readAsString(buildStep.inputId);
+    var funcNamePrefix = "";
+    final dirName = p.dirname(buildStep.inputId.path);
+
+    //if the view is nested, apply subfolders to func name as prefix
+    if (p.isWithin(_inputFolder, dirName)) {
+      funcNamePrefix = p
+          .split(dirName)
+          .skip(p.split(_inputFolder).length)
+          .map((part) => ReCase(part).pascalCase)
+          .join('');
+    }
+
     final fileNameWithoutExtension = fileNameWithExtension.split('.').first;
-    final viewFuncName = fileNameToView(fileNameWithExtension);
+    final viewFuncName =
+        fileNameToView(fileNameWithExtension, prefix: funcNamePrefix);
 
     final ast = DirkAST(
-      start: _start,
-      layout: _layout,
       contents: rawContents,
       isPartial: isPartial(fileNameWithExtension),
     )..parse();
