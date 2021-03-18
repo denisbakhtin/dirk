@@ -41,7 +41,7 @@ Basically all code instructions begin with `@` symbol. To escape it, use double 
 
 `@someObject.withMethod("abc")` is a simple expression. If the method returns `void`, use the complex expression.
 
-`@(someObject.toInt() + anotherObject.toInt())` is another for of expression with parenthesis for grouping code.
+`@(someObject.toInt() + anotherObject.toInt())` is another form of expression with parenthesis for grouping code.
 
 ```
 @{
