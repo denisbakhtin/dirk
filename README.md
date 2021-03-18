@@ -4,7 +4,7 @@ Under development.
 
 ## Installation
 
-Because the package is in its early stage, I did not push it to `pub.dev` yet. As soon as I make it more battle tested, will reconsider that.
+The package is in its early stage, so I decided not push it to `pub.dev` yet. As soon as I make it more battle tested, I will reconsider that.
 
 Add 
 ```
