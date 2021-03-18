@@ -1,4 +1,4 @@
-# Dirk - a view engine for dart inspired by c# ASP Razor
+# Dirk - a view engine for dart inspired by C# ASP Razor
 
 Under development.
 
