@@ -36,9 +36,13 @@ issue if you have a good suggestion.
 Basically all code instructions begin with `@` symbol. To escape it, use double `@@`, for example: `email@@gmail.com`.
 
 `@import 'dart:math';` tells the engine to import any available library or dart file.
-`@model TodoClass;` states that the type of the view model is `TodoClass` and you can reference it in your code as a `model` variable.
+
+`@model TodoClass;` states that the type of the view model is `TodoClass` and it can be referenced in your code as a `model` variable.
+
 `@someObject.withMethod("abc")` is a simple expression. If the method returns `void`, use the complex expression.
+
 `@(someObject.toInt() + anotherObject.toInt())` is another for of expression with parenthesis for grouping code.
+
 ```
 @{
   var i = 1;
@@ -48,6 +52,7 @@ Basically all code instructions begin with `@` symbol. To escape it, use double 
 }
 ```
 An example of complex expression. Unlike the simple ones it does not return any result to the html page.
+
 ```
 
 @if (i > 10) {
@@ -55,12 +60,14 @@ An example of complex expression. Unlike the simple ones it does not return any 
 }
 ```
 That is a basic `if` statement.
+
 ```
 @for (var i = 0; i < 10; i++) {
   <div>Line @i of 10</div>
 }
 ```
 Loop block.
+
 `@renderPartial("_header", "Awesome Website")` renders the `_header.dirk.html` partial with String parameter in place. Atm the partial has to be in the same folder, but this is a WIP and easily fixed.
 
 ## Note for the brave
