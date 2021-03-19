@@ -27,21 +27,18 @@ class DirkCodeGenerator implements Builder {
         buildStep.inputId.pathSegments.last.replaceAll('-', '_');
 
     final rawContents = await buildStep.readAsString(buildStep.inputId);
-    var funcNamePrefix = "";
-    final dirName = p.dirname(buildStep.inputId.path);
+    var relPath = buildStep.inputId.path;
 
     //if the view is nested, apply subfolders to func name as prefix
-    if (p.isWithin(_inputFolder, dirName)) {
-      funcNamePrefix = p
-          .split(dirName)
+    if (p.isWithin(_inputFolder, buildStep.inputId.path)) {
+      relPath = p
+          .split(buildStep.inputId.path)
           .skip(p.split(_inputFolder).length)
-          .map((part) => ReCase(part).pascalCase)
-          .join('');
+          .join(p.separator);
     }
 
     final fileNameWithoutExtension = fileNameWithExtension.split('.').first;
-    final viewFuncName =
-        fileNameToView(fileNameWithExtension, prefix: funcNamePrefix);
+    final viewFuncName = fileNameToView(relPath);
 
     final ast = DirkAST(
       contents: rawContents,

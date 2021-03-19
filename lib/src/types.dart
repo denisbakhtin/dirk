@@ -51,7 +51,7 @@ class Token {
           if (parts.length > 2)
             throw DirkException(
                 "Wrong renderPartial parameters, max 2 are allowed");
-          final RegExp rPartialName = RegExp('''['"]([_A-Za-z0-9]+)['"]''');
+          final RegExp rPartialName = RegExp('''['"]([_A-Za-z0-9\\/]+)['"]''');
           if (!rPartialName.hasMatch(parts.first))
             throw DirkException(
                 "Wrong partial name. Must be an alpha-numeric string in quotes");

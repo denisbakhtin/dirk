@@ -39,9 +39,9 @@ Basically all code instructions begin with `@` symbol. To escape it, use double 
 
 `@model TodoClass;` states that the type of the view model is `TodoClass` and it can be referenced in your code as a `model` variable.
 
-`@someObject.withMethod("abc")` is a simple expression. If the method returns `void`, use the complex expression.
+`@someObject.doSomeThing("abc")` is a simple expression. If the method returns `void`, use the complex expression.
 
-`@(someObject.toInt() + anotherObject.toInt())` is another form of expression with parenthesis for grouping code.
+`@(someObject.toInt() + anotherObject.toInt())` is another form of expression with grouping parenthesis.
 
 ```
 @{
@@ -51,10 +51,9 @@ Basically all code instructions begin with `@` symbol. To escape it, use double 
   youCanEvenCallSomeHeavyComputationTaskButThisIsNotBestPractice(sum);
 }
 ```
-An example of complex expression. Unlike the simple ones it does not return any result to the html page.
+An example of complex expression. Every line must be a valid dart statement. Unlike the above forms it does not return any result to the html page.
 
 ```
-
 @if (i > 10) {
   <p>Tell them the truth.</p>
 }
@@ -62,13 +61,13 @@ An example of complex expression. Unlike the simple ones it does not return any 
 That is a basic `if` statement.
 
 ```
-@for (var i = 0; i < 10; i++) {
+@for (var i = 1; i <= 10; i++) {
   <div>Line @i of 10</div>
 }
 ```
 Loop block.
 
-`@renderPartial("_header", "Awesome Website")` renders the `_header.dirk.html` partial with String parameter in place. Atm the partial has to be in the same folder, but this is a WIP and easily fixed.
+`@renderPartial("_header", "Awesome Website")` renders the `_header.dirk.html` partial with String parameter in place.
 
 ## Example
 
@@ -118,6 +117,6 @@ Some wording is totally wrong.
 
 ## To be done
 
-- Error check (unmatched braces, etc.)
-- Find a way to reference partials from a different subfolder (ex. placed in shared dir)
+- Error checks (unmatched braces, etc.)
+- ~~Find a way to reference partials from a different subfolder (ex. placed in shared dir).~~ **Done.**
 - Escape html & js code returned by expressions unless forced to do so

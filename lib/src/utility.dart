@@ -1,5 +1,6 @@
 import 'package:dart_style/dart_style.dart';
 import 'package:recase/recase.dart';
+import 'package:path/path.dart' as p;
 
 String tryFormatCode(String code) {
   try {
@@ -14,15 +15,17 @@ String tryFormatCode(String code) {
 }
 
 //transforms a file name into a view name, ex:
-//index.dirk.dart -> IndexView
-//_header.dirk.dart -> PartialHeaderView
-//Works for file name even without extention
-//prefix should be already in PascalCase
-String fileNameToView(String name, {String prefix = ''}) {
-  final nameWithoutExtension = name.split('.').first;
-  return (isPartial(name) ? "Partial" : "") +
-      prefix +
-      ReCase(nameWithoutExtension).pascalCase +
+//index.dirk.html -> IndexView
+//shared/menu.dirk.html -> SharedMenuView
+//_header.dirk.html -> PartialHeaderView
+//shared/_header.dirk.html -> PartialSharedHeaderView
+String fileNameToView(String name) {
+  var parts = p.split(name);
+  //remove extension
+  parts.last = parts.last.split('.').first;
+  var isPartialFile = isPartial(parts.last);
+  return (isPartialFile ? "Partial" : "") +
+      parts.map((el) => ReCase(el).pascalCase).join('') +
       "View";
 }
 

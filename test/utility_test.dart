@@ -12,5 +12,8 @@ void main() {
   test('fileNameToView', () {
     expect(fileNameToView("_header.dirk.html"), "PartialHeaderView");
     expect(fileNameToView("header.dirk.html"), "HeaderView");
+    expect(fileNameToView("shared/header.dirk.html"), "SharedHeaderView");
+    expect(
+        fileNameToView("shared/_header.dirk.html"), "PartialSharedHeaderView");
   });
 }
