@@ -72,7 +72,7 @@ Loop block.
 
 ## Example
 
-This is the output of `IndexView()` function produced by [index.dirk.html](https://github.com/denisbakhtin/dirk/blob/main/example/lib/views/index.dirk.html) view:
+This is the formatted output of `IndexView()` function produced by [index.dirk.html](https://github.com/denisbakhtin/dirk/blob/main/example/lib/views/index.dirk.html) view:
 ```
 <html>
   <head>
