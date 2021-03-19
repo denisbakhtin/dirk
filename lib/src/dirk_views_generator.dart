@@ -8,7 +8,7 @@ class DirkViewsGenerator implements Builder {
 
   DirkViewsGenerator(BuilderOptions builderOptions) {
     _options = builderOptions.config;
-    _outputName = "${_options["output_folder"]}/${_options["output_file"]}";
+    _outputName = "${_options["output_file"]}";
   }
 
   AssetId _viewsFileOutput(BuildStep buildStep) {

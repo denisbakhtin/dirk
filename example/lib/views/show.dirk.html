@@ -1,2 +1,15 @@
-Sparta this is!
-@{print('Show Heylo');}
+<h1>Details page example</h1>
+
+<p>An ecommerce product detail page design can often make or break a sale.</p>
+@{print('Show Hello');}
+
+<ul>
+    @for(var i = 0; i < 10; i++) {
+        <li>
+            Product feature number @(i+1).
+            @if (i == 9) {
+                No one can resist.
+            }
+        </li>
+    }
+</ul>

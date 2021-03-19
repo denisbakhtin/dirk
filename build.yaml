@@ -19,5 +19,4 @@ builders:
     build_to: source
     defaults:
       options:
-        output_folder: lib/views/
-        output_file: views.dart
+        output_file: lib/views/views.dart

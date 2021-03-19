@@ -30,7 +30,7 @@ Finally, run `pub run build_runner build` for a one-time code generation, or `pu
 ## Syntax
 
 The syntax resembles ASP Razor for those, who are familiar with it. Currently not all features (and I doubt they will ever be) implemented, because the goal is
-to have a lightweight template engine, that supports generic code instructions interpolated in html. This does not mean other features won't be added, so fire an
+to have a lightweight template engine with support for generic code instructions interpolated in html. This does not mean other features won't be added, so fire an
 issue if you have a good suggestion.
 
 Basically all code instructions begin with `@` symbol. To escape it, use double `@@`, for example: `email@@gmail.com`.
@@ -69,6 +69,39 @@ That is a basic `if` statement.
 Loop block.
 
 `@renderPartial("_header", "Awesome Website")` renders the `_header.dirk.html` partial with String parameter in place. Atm the partial has to be in the same folder, but this is a WIP and easily fixed.
+
+## Example
+
+This is the output of `IndexView()` function produced by [index.dirk.html](https://github.com/denisbakhtin/dirk/blob/main/example/lib/views/index.dirk.html) view:
+```
+<html>
+  <head>
+    <title>Best deals | Awesome Website</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">Navbar</a> 
+      <ul class="navbar-nav">
+        <li class="nav-item active"> 
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> 
+        </li>
+        <li class="nav-item"> <a class="nav-link" href="#">Products</a> </li>
+      </ul>
+    </nav>
+    <div class="container">
+      <h1>Product catalog</h1>
+      <small>27 quality items</small> 
+      <h5>We recommend</h5>
+      <p class="highlight">Impressive product 1</p>
+      <p class="highlight">Impressive product 2</p>
+      <p class="highlight">Impressive product 3</p>
+      <p class="highlight">Impressive product 4</p>
+      <p class="highlight">Impressive product 5</p>
+    </div>
+    <footer class="page-footer"> All rights reserved 2021. </footer>
+  </body>
+</html>
+```
 
 ## Note for the brave
 

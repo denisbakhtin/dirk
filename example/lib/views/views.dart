@@ -4,12 +4,12 @@
 
 String IndexView() {
   String res = '';
-  res += '''Sparta this is! ''';
-  res += '''${(1 + 1).toString()}''';
-  res += ''' == 2 Now loop paragraphs ''';
-  for (var i = 1; i < 10; i++) {
-    res += '''<p>Awesome printing #''';
-    res += '''${i}''';
+  res += '''<h1>Product catalog</h1> <small>''';
+  res += '''${(15 + 12).toString()}''';
+  res += ''' quality items</small> <h5>We recommend</h5> ''';
+  for (var i = 0; i < 5; i++) {
+    res += '''<p class="highlight">Impressive product ''';
+    res += '''${i + 1}''';
     res += '''</p> ''';
   }
   return LayoutView(res);
@@ -21,33 +21,48 @@ String LayoutView(String model) {
   res += '''${PartialHeaderView("Awesome Website")}''';
   res += ''' <body> ''';
   res += '''${PartialSharedMenuView()}''';
+  res += ''' <div class="container"> ''';
   res += '''${model}''';
-  res += ''' </body> </html>''';
+  res +=
+      ''' </div> <footer class="page-footer"> All rights reserved 2021. </footer> </body> </html>''';
   return res;
 }
 
 String SharedNestedView() {
   String res = '';
-  res += '''<p>This is a shared piece of template</p>''';
+  res += '''<p>This is a shared view</p>''';
   return LayoutView(res);
 }
 
 String PartialSharedMenuView() {
   String res = '';
-  res += '''<nav><li class="nav-item">Menu item</li></nav>''';
+  res +=
+      '''<nav class="navbar navbar-light bg-light"> <a class="navbar-brand" href="#">Navbar</a> <ul class="navbar-nav"> <li class="nav-item active"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li> <li class="nav-item"> <a class="nav-link" href="#">Products</a> </li> </ul> </nav>''';
   return res;
 }
 
 String ShowView() {
   String res = '';
-  res += '''Sparta this is! ''';
-  print('Show Heylo');
+  res +=
+      '''<h1>Details page example</h1> <p>An ecommerce product detail page design can often make or break a sale.</p> ''';
+  print('Show Hello');
+  res += ''' <ul> ''';
+  for (var i = 0; i < 10; i++) {
+    res += '''<li> Product feature number ''';
+    res += '''${i + 1}''';
+    res += '''. ''';
+    if (i == 9) {
+      res += '''No one can resist. ''';
+    }
+    res += ''' </li> ''';
+  }
+  res += ''' </ul>''';
   return LayoutView(res);
 }
 
 String PartialHeaderView(String model) {
   String res = '';
-  res += ''' <head> <title>This is head partial | ''';
+  res += ''' <head> <title>Best deals | ''';
   res += '''${model}''';
   res += '''</title> </head>''';
   return res;

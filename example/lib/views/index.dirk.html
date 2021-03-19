@@ -1,6 +1,9 @@
-Sparta this is!
-@((1+1).toString()) == 2
-Now loop paragraphs
-@for(var i = 1; i < 10; i++) {
-    <p>Awesome printing #@i</p>
+<h1>Product catalog</h1>
+
+<small>@((15+12).toString()) quality items</small>
+
+<h5>We recommend</h5>
+
+@for(var i = 0; i < 5; i++) {
+    <p class="highlight">Impressive product @(i+1)</p>
 }
