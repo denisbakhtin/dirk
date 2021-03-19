@@ -106,7 +106,7 @@ This is the output of `IndexView()` function produced by [index.dirk.html](https
 ## Note for the brave
 
 Dart is a beautiful language. The absence of type reflection for AOT binaries forces some moderate code generation to make things convenient. So learn and love `build_runner`, it is a nice 
-tool to have and master.
+tool to have and master. The advantage is - generated views are compiled with your main program and I believe are as fast as they can be (but there is always a room for optimization).
 
 ### Note for advanced users
 
