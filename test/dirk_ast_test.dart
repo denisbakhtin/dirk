@@ -395,4 +395,19 @@ my@@email.com''')..parse();
     ast = DirkAST(contents: '''@model ''')..parse();
     expect(ast.errors.length, 1);
   });
+
+  test('expressions are sanitized', () {
+    //Stop XSS exploits in the World Wide Web!!
+    var ast = DirkAST(
+      contents: '''
+    @{
+      var s = '<a href="javascript:alert();">evil link</a>';
+    }
+    @s
+''',
+      fileName: "index",
+    )..parse();
+    expect(ast.errors.length, 0);
+    print(ast.toViewFunction());
+  });
 }

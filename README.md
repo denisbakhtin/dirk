@@ -111,7 +111,7 @@ tool to have and master. The advantage is - generated views are compiled with yo
 
 At moment, all views are generated into one lexical scope as simple functions. You can always inspect the `lib/views/views.dart` file if something goes wrong, as well as `.dart_tool/build/generated/.../lib/views` for per view intermediate result.
 
-#### Note for grammar academics
+#### Note for grammar senpai
 
 Some wording is totally wrong.
 
@@ -119,4 +119,4 @@ Some wording is totally wrong.
 
 - ~~Error checks (unmatched braces, etc.)~~ **Done, but can be improved**
 - ~~Find a way to reference partials from a different subfolder (ex. placed in shared dir).~~ **Done.**
-- Escape html & js code returned by expressions unless forced to do so
+- ~~Escape html & js code returned by expressions unless explicitely forced~~ **Done. All js is strictly sanitized. XSS shall not pass. Html is not, so be careful if you show untrusted content (visitor comments, etc. Consider validating them on server side).**

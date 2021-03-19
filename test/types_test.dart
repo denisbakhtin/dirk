@@ -29,7 +29,7 @@ void main() {
 
   test('expression type', () {
     var token = Token(TokenType.expression, "model.print('123')");
-    expect(token.toString(), r"res += '''${model.print('123')}''';");
+    expect(token.toString(), r"res += '''${sanitize(model.print('123'))}''';");
   });
 
   test('text type', () {

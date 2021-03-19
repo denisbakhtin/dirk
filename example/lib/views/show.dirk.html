@@ -13,3 +13,10 @@
         </li>
     }
 </ul>
+
+<!-- Stop XSS exploits in the World Wide Web!! -->
+@{
+    var s = '<a href="javascript:alert();">evil link</a>';
+}
+
+This expression must be sanitized: @s

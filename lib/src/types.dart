@@ -44,7 +44,7 @@ class Token {
       case TokenType.block:
         return content;
       case TokenType.expression:
-        return "res += '''\${$content}''';";
+        return "res += '''\${sanitize($content)}''';";
       case TokenType.partial:
         {
           var parts = content.split(",");

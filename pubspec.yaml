@@ -20,7 +20,7 @@ dependencies:
   recase: ^3.0.1
   charcode: ^1.2.0
   glob: ^2.0.0
-  source_gen: ^0.9.10+4
+  sanitize_html: ^2.0.0
   
 dev_dependencies:
   test: ^1.15.7

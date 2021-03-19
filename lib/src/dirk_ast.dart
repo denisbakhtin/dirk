@@ -222,6 +222,7 @@ class DirkAST {
     String modelType = isLayoutView ? "String" : model.content;
 
     imports.forEach((el) => result.writeln(el));
+    result.writeln("import 'package:dirk/sanitize.dart';");
     result.writeln(
         "String ${name}(${modelType != '' ? modelType + ' model' : ''}) {");
     //reserved variables
