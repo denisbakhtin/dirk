@@ -115,3 +115,9 @@ At moment, all views are generated into one lexical scope as simple functions. Y
 #### Note for grammar academics
 
 Some wording is totally wrong.
+
+## To be done
+
+- Error check (unmatched braces, etc.)
+- Find a way to reference partials from a different subfolder (ex. placed in shared dir)
+- Escape html & js code returned by expressions unless forced to do so
