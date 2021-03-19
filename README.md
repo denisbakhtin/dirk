@@ -119,4 +119,4 @@ Some wording is totally wrong.
 
 - ~~Error checks (unmatched braces, etc.)~~ **Done, but can be improved**
 - ~~Find a way to reference partials from a different subfolder (ex. placed in shared dir).~~ **Done.**
-- ~~Escape html & js code returned by expressions unless explicitely forced~~ **Done. All js is strictly sanitized. XSS shall not pass. Html is not, so be careful if you show untrusted content (visitor comments, etc. Consider validating them on server side).**
+- ~~Escape html & js code returned by expressions unless explicitely forced~~ **Done. All js is strictly sanitized. XSS shall not pass. Html is not, so be careful when you show untrusted content (visitor comments, etc. Consider validating them on server side?).**
