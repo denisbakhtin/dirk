@@ -21,64 +21,56 @@ final RegExp _partial = RegExp(r'renderPartial[\s\t]*');
 
 class DirkAST {
   final String contents;
-  final bool isPartial;
+  final String fileName;
+  final bool _isPartial;
   List<DirkError> errors = [];
   List<Token> tree = [];
 
   DirkAST({
     this.contents = '',
-    this.isPartial = false,
-  });
+    this.fileName = '',
+  }) : this._isPartial = isPartial(fileName);
 
   String _scanTillEndOfStatement(SpanScanner scanner) {
     var buffer = '';
-    try {
-      while (!scanner.isDone) {
-        var ch = scanner.readChar();
-        if (ch == $cr || ch == $lf || ch == $semicolon) {
-          return buffer;
-        }
-        buffer += String.fromCharCode(ch);
+    while (!scanner.isDone) {
+      var ch = scanner.readChar();
+      if (ch == $cr || ch == $lf || ch == $semicolon) {
+        return buffer;
       }
-    } catch (e) {
-      errors.add(DirkError(e.toString(), scanner.lastSpan));
+      buffer += String.fromCharCode(ch);
     }
+    errors.add(DirkError("Unfinished statement", scanner.lastSpan));
     return buffer;
   }
 
   String _scanTillClosingCurlyBrace(SpanScanner scanner) {
     var openBraces = 1;
     var buffer = '';
-    try {
-      while (!scanner.isDone) {
-        var ch = scanner.readChar();
-        if (ch == $lbrace) openBraces++;
-        if (ch == $rbrace && --openBraces == 0) {
-          return buffer;
-        }
-        buffer += String.fromCharCode(ch);
+    while (!scanner.isDone) {
+      var ch = scanner.readChar();
+      if (ch == $lbrace) openBraces++;
+      if (ch == $rbrace && --openBraces == 0) {
+        return buffer;
       }
-    } catch (e) {
-      errors.add(DirkError(e.toString(), scanner.lastSpan));
+      buffer += String.fromCharCode(ch);
     }
+    errors.add(DirkError("Unbalanced { found", scanner.lastSpan));
     return buffer;
   }
 
   String _scanTillClosingParen(SpanScanner scanner) {
     var openParen = 1;
     var buffer = '';
-    try {
-      while (!scanner.isDone) {
-        var ch = scanner.readChar();
-        if (ch == $lparen) openParen++;
-        if (ch == $rparen && --openParen == 0) {
-          return buffer;
-        }
-        buffer += String.fromCharCode(ch);
+    while (!scanner.isDone) {
+      var ch = scanner.readChar();
+      if (ch == $lparen) openParen++;
+      if (ch == $rparen && --openParen == 0) {
+        return buffer;
       }
-    } catch (e) {
-      errors.add(DirkError(e.toString(), scanner.lastSpan));
+      buffer += String.fromCharCode(ch);
     }
+    errors.add(DirkError("Unbalanced ( found", scanner.lastSpan));
     return buffer;
   }
 
@@ -214,7 +206,8 @@ class DirkAST {
   }
 
   //Compile the tree as a view function
-  String toViewFunction(String name) {
+  String toViewFunction() {
+    var name = fileNameToView(fileName);
     final isLayoutView = name == "LayoutView";
 
     StringBuffer result = StringBuffer();
@@ -240,7 +233,7 @@ class DirkAST {
     tree.forEach((el) => result.writeln(el));
 
     result.writeln(
-        isLayoutView || isPartial ? "return res;" : "return LayoutView(res);");
+        isLayoutView || _isPartial ? "return res;" : "return LayoutView(res);");
     result.writeln("}");
 
     //for LayoutView replace placeholder with model param
@@ -249,5 +242,13 @@ class DirkAST {
         : result.toString();
 
     return tryFormatCode(res);
+  }
+
+  printErrors() {
+    errors.forEach((err) {
+      print('''[WARNING] Code parsing failed.
+          Reason: $err
+          ''');
+    });
   }
 }

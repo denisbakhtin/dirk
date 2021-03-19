@@ -38,13 +38,15 @@ class DirkCodeGenerator implements Builder {
     }
 
     final fileNameWithoutExtension = fileNameWithExtension.split('.').first;
-    final viewFuncName = fileNameToView(relPath);
 
     final ast = DirkAST(
       contents: rawContents,
-      isPartial: isPartial(fileNameWithExtension),
+      fileName: relPath,
     )..parse();
-    final result = ast.toViewFunction(viewFuncName);
+
+    ast.printErrors();
+
+    final result = ast.toViewFunction();
 
     final copyAssetId = AssetId(buildStep.inputId.package,
         '${p.dirname(buildStep.inputId.path)}/$fileNameWithoutExtension$_outputFileExtension');

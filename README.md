@@ -41,7 +41,7 @@ Basically all code instructions begin with `@` symbol. To escape it, use double 
 
 `@someObject.doSomeThing("abc")` is a simple expression. If the method returns `void`, use the complex expression.
 
-`@(someObject.toInt() + anotherObject.toInt())` is another form of expression with grouping parenthesis.
+`@(someObject.toInt() + anotherObject.toInt())` is another form of expression with grouping parentheses.
 
 ```
 @{
@@ -117,6 +117,6 @@ Some wording is totally wrong.
 
 ## To be done
 
-- Error checks (unmatched braces, etc.)
+- ~~Error checks (unmatched braces, etc.)~~ **Done, but can be improved**
 - ~~Find a way to reference partials from a different subfolder (ex. placed in shared dir).~~ **Done.**
 - Escape html & js code returned by expressions unless forced to do so

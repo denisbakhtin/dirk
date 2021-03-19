@@ -20,18 +20,28 @@ String tryFormatCode(String code) {
 //_header.dirk.html -> PartialHeaderView
 //shared/_header.dirk.html -> PartialSharedHeaderView
 String fileNameToView(String name) {
-  var parts = p.split(name);
-  //remove extension
-  parts.last = parts.last.split('.').first;
-  var isPartialFile = isPartial(parts.last);
-  return (isPartialFile ? "Partial" : "") +
-      parts.map((el) => ReCase(el).pascalCase).join('') +
-      "View";
+  try {
+    var parts = p.split(name);
+    //remove extension
+    parts.last = parts.last.split('.').first;
+    var isPartialFile = isPartial(name);
+    return (isPartialFile ? "Partial" : "") +
+        parts.map((el) => ReCase(el).pascalCase).join('') +
+        "View";
+  } catch (e) {
+    print('''[Error] in fileNameToView.
+          Reason: $e''');
+    return "_";
+  }
 }
 
 //checks if file name designates a partial view
 bool isPartial(String name) {
-  return name.startsWith("_");
+  try {
+    return p.split(name).last.startsWith("_");
+  } catch (_) {
+    return false;
+  }
 }
 
 String emptyLayoutFunction() => '''

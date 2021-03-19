@@ -244,11 +244,12 @@ my@@email.com''')..parse();
     Best text
 </body>
 </html>''',
+      fileName: "index.dirk.html",
     )..parse();
 
     expect(ast.errors.length, 0);
 
-    var vfunc = ast.toViewFunction("IndexView");
+    var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
     expect(RegExp(r'String IndexView\(\) \{').hasMatch(vfunc), true,
         reason: vfunc);
@@ -262,11 +263,12 @@ my@@email.com''')..parse();
       Best text
   </body>
 </html>''',
+      fileName: "index.dirk.html",
     )..parse();
 
     expect(ast.errors.length, 0);
 
-    var vfunc = ast.toViewFunction("IndexView");
+    var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
     expect(
         RegExp(r'String IndexView\(int model\) \{[.]*').hasMatch(vfunc), true,
@@ -280,11 +282,12 @@ my@@email.com''')..parse();
       Best text
   </body>
 </html>''',
+      fileName: "index.dirk.html",
     )..parse();
 
     expect(ast.errors.length, 0);
 
-    var vfunc = ast.toViewFunction("IndexView");
+    var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
     expect(RegExp(r'return LayoutView\(res\);').hasMatch(vfunc), true,
         reason: vfunc);
@@ -297,11 +300,12 @@ my@@email.com''')..parse();
       Best text
   </body>
 </html>''',
+      fileName: "layout.dirk.html",
     )..parse();
 
     expect(ast.errors.length, 0);
 
-    var vfunc = ast.toViewFunction("LayoutView");
+    var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
     expect(RegExp(r'return res;').hasMatch(vfunc), true, reason: vfunc);
   });
@@ -313,13 +317,82 @@ my@@email.com''')..parse();
       Best text
   </body>
 </html>''',
-      isPartial: true,
+      fileName: "_header.dirk.html",
     )..parse();
 
     expect(ast.errors.length, 0);
 
-    var vfunc = ast.toViewFunction("PartialHeaderView");
+    var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
     expect(RegExp(r'return res;').hasMatch(vfunc), true, reason: vfunc);
+  });
+
+  test('unbalanced closing }', () {
+    var ast = DirkAST(contents: '''@if cond) {
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@if (cond {
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@if (cond) 
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@if (cond) {
+  then do something
+''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@for cond) {
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@for (cond {
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@for (cond) 
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@for (cond) {
+  then do something
+''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@for (cond) {
+  then do something
+}''')..parse();
+    expect(ast.errors.length, 0);
+  });
+
+  test('unbalanced closing )', () {
+    var ast = DirkAST(contents: '''@some(''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@(some''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@obj.method(''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@obj.method()''')..parse();
+    expect(ast.errors.length, 0);
+  });
+
+  test('unfinished statements', () {
+    var ast = DirkAST(contents: '''@import ''')..parse();
+    expect(ast.errors.length, 1);
+
+    ast = DirkAST(contents: '''@model ''')..parse();
+    expect(ast.errors.length, 1);
   });
 }
