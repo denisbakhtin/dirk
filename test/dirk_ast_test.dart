@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 void main() {
   test('import', () {
     var ast = DirkAST(contents: '''@import some_cool_lib
-@import    another_cool_lib;''')..parse();
+@import    another_cool_lib;''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.$import);
@@ -20,7 +20,7 @@ void main() {
 
   test('model', () {
     var ast = DirkAST(contents: '''@model some_cool_model_type
-@model    another_cool_model_type;''')..parse();
+@model    another_cool_model_type;''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.model);
@@ -38,7 +38,7 @@ void main() {
 }
 @if (cond2 ) {
   then do
-}''')..parse();
+}''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.$if);
@@ -62,7 +62,7 @@ void main() {
 }
 @for (var i = 1; i < 10; i++ ) {
   do more
-}''')..parse();
+}''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.$for);
@@ -84,7 +84,7 @@ void main() {
     var ast = DirkAST(contents: '''@{
   do something
 }
-@{ do more }''')..parse();
+@{ do more }''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.block);
@@ -98,7 +98,7 @@ void main() {
 
   test('complex expression', () {
     var ast = DirkAST(contents: '''@(do something)
-@( do more )''')..parse();
+@( do more )''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.expression);
@@ -112,7 +112,7 @@ void main() {
 
   test('expression', () {
     var ast = DirkAST(contents: '''@do something
-@more.do()''')..parse();
+@more.do()''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.expression);
@@ -130,7 +130,7 @@ void main() {
 
   test('plain text', () {
     var ast = DirkAST(contents: '''<h1>Title text</h1>
-<p>Paragraph</p>''')..parse();
+<p>Paragraph</p>''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.text);
@@ -161,7 +161,7 @@ void main() {
   then do something
 }
 
-my@@email.com''')..parse();
+my@@email.com''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.$import);
@@ -217,7 +217,7 @@ my@@email.com''')..parse();
     Sparta this is!
     @print('Index Heylo')
 </body>
-</html>''')..parse();
+</html>''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.text);
@@ -230,6 +230,7 @@ my@@email.com''')..parse();
 <p>Sparta this is!</p>
 <p>@renderPartial("_body", 12)</p>
     ''',
+      fileName: "index",
     )..parse();
 
     expect(ast.errors.length, 0);
@@ -330,69 +331,69 @@ my@@email.com''')..parse();
   test('unbalanced closing }', () {
     var ast = DirkAST(contents: '''@if cond) {
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@if (cond {
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@if (cond) 
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@if (cond) {
   then do something
-''')..parse();
+''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@for cond) {
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@for (cond {
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@for (cond) 
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@for (cond) {
   then do something
-''')..parse();
+''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
     ast = DirkAST(contents: '''@for (cond) {
   then do something
-}''')..parse();
+}''', fileName: "index")..parse();
     expect(ast.errors.length, 0);
   });
 
   test('unbalanced closing )', () {
-    var ast = DirkAST(contents: '''@some(''')..parse();
+    var ast = DirkAST(contents: '''@some(''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
-    ast = DirkAST(contents: '''@(some''')..parse();
+    ast = DirkAST(contents: '''@(some''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
-    ast = DirkAST(contents: '''@obj.method(''')..parse();
+    ast = DirkAST(contents: '''@obj.method(''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
-    ast = DirkAST(contents: '''@obj.method()''')..parse();
+    ast = DirkAST(contents: '''@obj.method()''', fileName: "index")..parse();
     expect(ast.errors.length, 0);
   });
 
   test('unfinished statements', () {
-    var ast = DirkAST(contents: '''@import ''')..parse();
+    var ast = DirkAST(contents: '''@import ''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
-    ast = DirkAST(contents: '''@model ''')..parse();
+    ast = DirkAST(contents: '''@model ''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
   });
 
@@ -408,6 +409,5 @@ my@@email.com''')..parse();
       fileName: "index",
     )..parse();
     expect(ast.errors.length, 0);
-    print(ast.toViewFunction());
   });
 }

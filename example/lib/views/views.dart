@@ -23,7 +23,7 @@ String LayoutView(String model) {
   res += ''' <body> ''';
   res += '''${PartialSharedMenuView()}''';
   res += ''' <div class="container"> ''';
-  res += '''${sanitize(model)}''';
+  res += '''${model}''';
   res +=
       ''' </div> <footer class="page-footer"> All rights reserved 2021. </footer> </body> </html>''';
   return res;

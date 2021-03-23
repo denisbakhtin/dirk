@@ -22,14 +22,20 @@ final RegExp _partial = RegExp(r'renderPartial[\s\t]*');
 class DirkAST {
   final String contents;
   final String fileName;
-  final bool _isPartial;
+  late final bool _isPartial;
+  late final bool _isLayout;
+  late final String _funcName;
   List<DirkError> errors = [];
   List<Token> tree = [];
 
   DirkAST({
     this.contents = '',
     this.fileName = '',
-  }) : this._isPartial = isPartial(fileName);
+  }) {
+    _isPartial = isPartial(fileName);
+    _funcName = fileNameToView(fileName);
+    _isLayout = _funcName == "LayoutView";
+  }
 
   String _scanTillEndOfStatement(SpanScanner scanner) {
     var buffer = '';
@@ -207,9 +213,6 @@ class DirkAST {
 
   //Compile the tree as a view function
   String toViewFunction() {
-    var name = fileNameToView(fileName);
-    final isLayoutView = name == "LayoutView";
-
     StringBuffer result = StringBuffer();
     List<Token> imports =
         tree.where((el) => el.type == TokenType.$import).toList();
@@ -219,12 +222,12 @@ class DirkAST {
         (el) => el.type == TokenType.$import || el.type == TokenType.model);
 
     //force String param for LayoutView
-    String modelType = isLayoutView ? "String" : model.content;
+    String modelType = _isLayout ? "String" : model.content;
 
     imports.forEach((el) => result.writeln(el));
     result.writeln("import 'package:dirk/sanitize.dart';");
     result.writeln(
-        "String ${name}(${modelType != '' ? modelType + ' model' : ''}) {");
+        "String ${_funcName}(${modelType != '' ? modelType + ' model' : ''}) {");
     //reserved variables
     result.writeln("String res = '';");
     //TBD, atm layout is fixed
@@ -234,12 +237,14 @@ class DirkAST {
     tree.forEach((el) => result.writeln(el));
 
     result.writeln(
-        isLayoutView || _isPartial ? "return res;" : "return LayoutView(res);");
+        _isLayout || _isPartial ? "return res;" : "return LayoutView(res);");
     result.writeln("}");
 
     //for LayoutView replace placeholder with model param
-    var res = isLayoutView
-        ? result.toString().replaceAll(RegExp(r'renderBody\(\)'), 'model')
+    var res = _isLayout
+        ? result
+            .toString()
+            .replaceAll(RegExp(r'sanitize\(renderBody\(\)\)'), 'model')
         : result.toString();
 
     return tryFormatCode(res);

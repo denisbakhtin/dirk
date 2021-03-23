@@ -16,7 +16,9 @@ class Token {
   TokenType type;
   String content;
   List<Token> children;
-  Token(this.type, this.content, {this.children = const []}) {
+  final bool sanitize;
+  Token(this.type, this.content,
+      {this.sanitize = true, this.children = const []}) {
     children = List<Token>.from(children, growable: true);
   }
 
