@@ -39,10 +39,13 @@ void main() {
 
   test('partial type', () {
     var token = Token(TokenType.partial, "'_header'");
-    expect(token.toString(), r"res += '''${PartialHeaderView()}''';");
+    expect(token.toString(),
+        r"res += '''${PartialHeaderView(viewData: viewData)}''';");
     token = Token(TokenType.partial, "'_header', 'param'");
-    expect(token.toString(), r"res += '''${PartialHeaderView('param')}''';");
+    expect(token.toString(),
+        r"res += '''${PartialHeaderView('param', viewData: viewData)}''';");
     token = Token(TokenType.partial, "'_header', 123");
-    expect(token.toString(), r"res += '''${PartialHeaderView(123)}''';");
+    expect(token.toString(),
+        r"res += '''${PartialHeaderView(123, viewData: viewData)}''';");
   });
 }

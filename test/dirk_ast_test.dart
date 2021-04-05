@@ -252,7 +252,10 @@ my@@email.com''', fileName: "index")..parse();
 
     var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
-    expect(RegExp(r'String IndexView\(\) \{').hasMatch(vfunc), true,
+    expect(
+        RegExp(r'String IndexView\(\{Map<String, dynamic> viewData = const \{\}\}\) \{')
+            .hasMatch(vfunc),
+        true,
         reason: vfunc);
   });
 
@@ -272,7 +275,9 @@ my@@email.com''', fileName: "index")..parse();
     var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
     expect(
-        RegExp(r'String IndexView\(int model\) \{[.]*').hasMatch(vfunc), true,
+        RegExp(r'String IndexView\(int model, \{Map<String, dynamic> viewData = const \{\}\}\) \{')
+            .hasMatch(vfunc),
+        true,
         reason: vfunc);
   });
 
@@ -290,7 +295,10 @@ my@@email.com''', fileName: "index")..parse();
 
     var vfunc = ast.toViewFunction();
     expect(ast.errors.length, 0);
-    expect(RegExp(r'return LayoutView\(res\);').hasMatch(vfunc), true,
+    expect(
+        RegExp(r'return LayoutView\(res, viewData: viewData\);')
+            .hasMatch(vfunc),
+        true,
         reason: vfunc);
   });
 

@@ -3,8 +3,9 @@
 // ignore_for_file: unused_import, unused_local_variable
 import 'package:dirk/sanitize.dart';
 
-String IndexView() {
+String IndexView({Map<String, dynamic> viewData = const {}}) {
   String res = '';
+  viewData = Map.from(viewData);
   res += '''<h1>Product catalog</h1> <small>''';
   res += '''${sanitize((15 + 12).toString())}''';
   res += ''' quality items</small> <h5>We recommend</h5> ''';
@@ -13,15 +14,16 @@ String IndexView() {
     res += '''${sanitize(i + 1)}''';
     res += '''</p> ''';
   }
-  return LayoutView(res);
+  return LayoutView(res, viewData: viewData);
 }
 
-String LayoutView(String model) {
+String LayoutView(String model, {Map<String, dynamic> viewData = const {}}) {
   String res = '';
+  viewData = Map.from(viewData);
   res += '''<html> ''';
-  res += '''${PartialHeaderView("Awesome Website")}''';
+  res += '''${PartialHeaderView("Awesome Website", viewData: viewData)}''';
   res += ''' <body> ''';
-  res += '''${PartialSharedMenuView()}''';
+  res += '''${PartialSharedMenuView(viewData: viewData)}''';
   res += ''' <div class="container"> ''';
   res += '''${model}''';
   res +=
@@ -29,23 +31,27 @@ String LayoutView(String model) {
   return res;
 }
 
-String SharedNestedView() {
+String SharedNestedView({Map<String, dynamic> viewData = const {}}) {
   String res = '';
+  viewData = Map.from(viewData);
   res += '''<p>This is a shared view</p>''';
-  return LayoutView(res);
+  return LayoutView(res, viewData: viewData);
 }
 
-String PartialSharedMenuView() {
+String PartialSharedMenuView({Map<String, dynamic> viewData = const {}}) {
   String res = '';
+  viewData = Map.from(viewData);
   res +=
       '''<nav class="navbar navbar-light bg-light"> <a class="navbar-brand" href="#">Navbar</a> <ul class="navbar-nav"> <li class="nav-item active"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li> <li class="nav-item"> <a class="nav-link" href="#">Products</a> </li> </ul> </nav>''';
   return res;
 }
 
-String ShowView() {
+String ShowView({Map<String, dynamic> viewData = const {}}) {
   String res = '';
+  viewData = Map.from(viewData);
+  viewData['MetaDescription'] = 'Product page description';
   res +=
-      '''<h1>Details page example</h1> <p>An ecommerce product detail page design can often make or break a sale.</p> ''';
+      ''' <h1>Details page example</h1> <p>An ecommerce product detail page design can often make or break a sale.</p> ''';
   print('Show Hello');
   res += ''' <ul> ''';
   for (var i = 0; i < 10; i++) {
@@ -61,13 +67,17 @@ String ShowView() {
   var s = '<a href="javascript:alert();">evil link</a>';
   res += ''' This expression must be sanitized: ''';
   res += '''${sanitize(s)}''';
-  return LayoutView(res);
+  return LayoutView(res, viewData: viewData);
 }
 
-String PartialHeaderView(String model) {
+String PartialHeaderView(String model,
+    {Map<String, dynamic> viewData = const {}}) {
   String res = '';
+  viewData = Map.from(viewData);
   res += ''' <head> <title>Best deals | ''';
   res += '''${sanitize(model)}''';
-  res += '''</title> </head>''';
+  res += '''</title> <meta name="description" content="''';
+  res += '''${sanitize(viewData['MetaDescription'])}''';
+  res += '''"> </head> ''';
   return res;
 }

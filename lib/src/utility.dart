@@ -1,6 +1,6 @@
 import 'package:dart_style/dart_style.dart';
-import 'package:recase/recase.dart';
 import 'package:path/path.dart' as p;
+import 'package:recase/recase.dart';
 import 'package:sanitize_html/sanitize_html.dart' show sanitizeHtml;
 
 String tryFormatCode(String code) {
@@ -53,5 +53,5 @@ String LayoutView(String model) {
 
 //Strip malicious code to prevent XSS attack
 String sanitize(dynamic html) {
-  return sanitizeHtml(html.toString());
+  return sanitizeHtml(html == null ? '' : html.toString());
 }

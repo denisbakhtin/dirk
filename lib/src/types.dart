@@ -60,7 +60,9 @@ class Token {
           var name = rPartialName.firstMatch(parts.first)?.group(1);
           var result = "res += '''\${";
           result += fileNameToView(name ?? "");
-          result += parts.length > 1 ? '(${parts.last.trim()})' : '()';
+          result += parts.length > 1
+              ? '(${parts.last.trim()}, viewData: viewData)'
+              : '(viewData: viewData)';
           result += "}''';";
           return result;
         }

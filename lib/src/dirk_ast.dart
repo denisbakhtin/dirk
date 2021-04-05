@@ -226,18 +226,26 @@ class DirkAST {
 
     imports.forEach((el) => result.writeln(el));
     result.writeln("import 'package:dirk/sanitize.dart';");
-    result.writeln(
-        "String ${_funcName}(${modelType != '' ? modelType + ' model' : ''}) {");
+    if (modelType != '') {
+      result.writeln(
+          "String ${_funcName}($modelType model, {Map<String, dynamic> viewData = const {}}) {");
+    } else {
+      result.writeln(
+          "String ${_funcName}({Map<String, dynamic> viewData = const {}}) {");
+    }
     //reserved variables
     result.writeln("String res = '';");
+    //create a local copy of viewData map
+    result.writeln("viewData = Map.from(viewData);");
     //TBD, atm layout is fixed
     //you can override 'layout' var in the _viewstart or a specific view
     //result.writeln("String layout = '';");
 
     tree.forEach((el) => result.writeln(el));
 
-    result.writeln(
-        _isLayout || _isPartial ? "return res;" : "return LayoutView(res);");
+    result.writeln(_isLayout || _isPartial
+        ? "return res;"
+        : "return LayoutView(res, viewData: viewData);");
     result.writeln("}");
 
     //for LayoutView replace placeholder with model param

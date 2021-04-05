@@ -69,6 +69,8 @@ Loop block.
 
 `@renderPartial("_header", "Awesome Website")` renders the `_header.dirk.html` partial with String parameter in place.
 
+Besides using a strictly typed model to pass parameters to view function, there is a possibility to store values in a dynamic `Map<String, dynamic>` `viewData` variable. E.g.: in your server controller call `IndexView(myIndexViewModel, viewData: {'Title': 'Welcome to my example web site'});`, or inside your view write `@{viewData['Title'] = 'Welcome!';}`, what allows you to reference `@viewData['Title']` anywhere in your `index.dirk.html` file or layout and partials. This is handy for setting SEO meta tags and other contextual vars that are common to most your views.
+
 ## Example
 
 This is the formatted output of `IndexView()` function produced by [index.dirk.html](https://github.com/denisbakhtin/dirk/blob/main/example/lib/views/index.dirk.html) view:
