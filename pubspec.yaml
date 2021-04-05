@@ -1,6 +1,6 @@
 name: dirk
 description: A view template engine, inspired by ASP Razor. Uses code generation to dodge dart:mirrors dependency & achieve better performance.
-version: 0.0.1
+version: 0.0.2
 author: Denis Bakhtin <denis.bakhtin@gmail.com>
 homepage: https://github.com/denisbakhtin/dirk
 
