@@ -11,6 +11,7 @@ final RegExp _import = RegExp(r'import[\s\t]+');
 final RegExp _model = RegExp(r'model[\s\t]+');
 final RegExp _if = RegExp(r'if[\s\t]*');
 final RegExp _ifCondition = RegExp(r'\(([^\n]+)\)[\s\t]*\{[\s\t\n]+');
+final RegExp _else = RegExp(r'[ \n\r\t]+else[\s\t]*\{[\s\t\n]+');
 final RegExp _forCondition = RegExp(r'\(([^\n]+)\)[\s\t]*\{[\s\t\n]+');
 final RegExp _for = RegExp(r'for[\s\t]*');
 final RegExp _block = RegExp(r'\{');
@@ -115,16 +116,25 @@ class DirkAST {
           tree.add(Token(TokenType.model, text));
           continue;
         }
-        //matches: if (...) {...}
+        //matches: if (...) {...} else {...}
         if (_scanner.scan(_if)) {
           if (_scanner.scan(_ifCondition)) {
             var condition = _scanner.lastMatch?.group(1);
             var body = _scanTillClosingCurlyBrace(_scanner);
-            tree.add(Token(TokenType.$if, condition ?? ""));
+            tree.add(Token(TokenType.$if, condition!));
             _deepParse(tree.last.children, body);
           } else {
             errors.add(DirkError(
                 "Incorrect 'if' condition pattern", _scanner.lastSpan));
+          }
+          if (_scanner.scan(_else)) {
+            var body = _scanTillClosingCurlyBrace(_scanner);
+            var token = tree.last;
+            if (token.type != TokenType.$if) {
+              errors.add(DirkError(
+                  "Incorrect 'else' condition pattern", _scanner.lastSpan));
+            }
+            _deepParse(token.childrenAlt, body);
           }
           continue;
         }
@@ -165,6 +175,7 @@ class DirkAST {
           continue;
         }
         //matches: anyExpression
+        //TODO: allow it to parse viewData["abc"]
         if (_scanner.scan(_expr)) {
           var body = _scanner.lastMatch?.group(1);
           tree.add(Token(TokenType.expression, body ?? ""));

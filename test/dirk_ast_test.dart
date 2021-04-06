@@ -56,6 +56,25 @@ void main() {
     expect(ast.tree[1].children.first.children, []);
   });
 
+  test('if statement with else', () {
+    var ast = DirkAST(contents: '''@if(cond) {
+  then do something
+} else {
+  then do else
+}
+''', fileName: "index")..parse();
+
+    expect(ast.errors.length, 0);
+    expect(ast.tree[0].type, TokenType.$if);
+    expect(ast.tree[0].content, "cond");
+    expect(ast.tree[0].children.length, 1);
+    expect(ast.tree[0].children.first.type, TokenType.text);
+    expect(ast.tree[0].children.first.content, "then do something ");
+    expect(ast.tree[0].childrenAlt.length, 1);
+    expect(ast.tree[0].childrenAlt.first.type, TokenType.text);
+    expect(ast.tree[0].childrenAlt.first.content, "then do else ");
+  });
+
   test('for statement', () {
     var ast = DirkAST(contents: '''@for(cond) {
   do something

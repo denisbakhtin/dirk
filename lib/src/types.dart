@@ -16,10 +16,15 @@ class Token {
   TokenType type;
   String content;
   List<Token> children;
+  //used for storing 'else' part of 'if' statement atm
+  List<Token> childrenAlt;
   final bool sanitize;
   Token(this.type, this.content,
-      {this.sanitize = true, this.children = const []}) {
+      {this.sanitize = true,
+      this.children = const [],
+      this.childrenAlt = const []}) {
     children = List<Token>.from(children, growable: true);
+    childrenAlt = List<Token>.from(childrenAlt, growable: true);
   }
 
   @override
@@ -34,6 +39,12 @@ class Token {
           var result = "if ($content) {\n";
           children.forEach((el) => result += el.toString());
           result += "}";
+          if (childrenAlt.isNotEmpty) {
+            result += " else {\n";
+            childrenAlt.forEach((el) => result += el.toString());
+            result += "}";
+          }
+
           return result;
         }
       case TokenType.$for:

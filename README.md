@@ -56,6 +56,8 @@ An example of complex expression. Every line must be a valid dart statement. Unl
 ```
 @if (i > 10) {
   <p>Tell them the truth.</p>
+} else {
+	<p>Soothe their nerves.</p>
 }
 ```
 That is a basic `if` statement.

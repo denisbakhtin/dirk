@@ -15,6 +15,14 @@ void main() {
     expect(token.toString(), "if (i < 10) {\nres += '''then do this''';}");
   });
 
+  test('if type with else', () {
+    var token = Token(TokenType.$if, "i < 10",
+        children: [Token(TokenType.text, "then do this")],
+        childrenAlt: [Token(TokenType.text, "else do this")]);
+    expect(token.toString(),
+        "if (i < 10) {\nres += '''then do this''';} else {\nres += '''else do this''';}");
+  });
+
   test('for type', () {
     var token = Token(TokenType.$for, "var i = 1; i < 10; i++",
         children: [Token(TokenType.text, "do this")]);
