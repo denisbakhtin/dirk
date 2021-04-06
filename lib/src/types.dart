@@ -4,7 +4,7 @@ import 'package:source_span/source_span.dart';
 enum TokenType {
   layout,
   $import,
-  model,
+  type,
   $if,
   $for,
   block,

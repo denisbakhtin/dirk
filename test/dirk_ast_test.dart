@@ -16,15 +16,15 @@ void main() {
     expect(ast.tree[1].content, "another_cool_lib");
   });
 
-  test('model', () {
-    var ast = DirkAST(contents: '''@model some_cool_model_type
-@model    another_cool_model_type;''', fileName: "index")..parse();
+  test('type', () {
+    var ast = DirkAST(contents: '''@type some_cool_model_type
+@type    another_cool_model_type;''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
-    expect(ast.tree[0].type, TokenType.model);
+    expect(ast.tree[0].type, TokenType.type);
     expect(ast.tree[0].content, "some_cool_model_type");
 
-    expect(ast.tree[1].type, TokenType.model);
+    expect(ast.tree[1].type, TokenType.type);
     expect(ast.tree[1].content, "another_cool_model_type");
   });
 
@@ -151,7 +151,7 @@ void main() {
   test('mixed markup', () {
     var ast = DirkAST(contents: '''@import some_cool_lib
 
-@model some_cool_model_type
+@type some_cool_model_type
 
 <h1>Title text</h1>
 @(Model.execute())
@@ -177,7 +177,7 @@ my@@email.com''', fileName: "index")..parse();
     expect(ast.tree[0].type, TokenType.$import);
     expect(ast.tree[0].content, "some_cool_lib");
 
-    expect(ast.tree[1].type, TokenType.model);
+    expect(ast.tree[1].type, TokenType.type);
     expect(ast.tree[1].content, "some_cool_model_type");
 
     //some whitespaces here and there are ok at moment
@@ -269,7 +269,7 @@ my@@email.com''', fileName: "index")..parse();
 
   test('generates View function with parameter', () {
     var ast = DirkAST(
-      contents: '''@model int;
+      contents: '''@type int;
 <html>
   <body>
       Best text
@@ -409,7 +409,7 @@ my@@email.com''', fileName: "index")..parse();
     var ast = DirkAST(contents: '''@import ''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
 
-    ast = DirkAST(contents: '''@model ''', fileName: "index")..parse();
+    ast = DirkAST(contents: '''@type ''', fileName: "index")..parse();
     expect(ast.errors.length, 1);
   });
 

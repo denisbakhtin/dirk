@@ -9,7 +9,7 @@ final RegExp _whitespaceOnly = RegExp(r'^[ \n\r\t]+$');
 final RegExp _at = RegExp(r'@');
 final RegExp _import = RegExp(r'import[\s\t]+');
 final RegExp _layout = RegExp(r'layout[\s\t]+');
-final RegExp _model = RegExp(r'model[\s\t]+');
+final RegExp _type = RegExp(r'type[\s\t]+');
 final RegExp _if = RegExp(r'if[\s\t]*');
 final RegExp _ifCondition = RegExp(r'\(([^\n]+)\)[\s\t]*\{');
 final RegExp _else = RegExp(r'[ \n\r\t]+else[\s\t]*\{');
@@ -112,9 +112,9 @@ class DirkAST {
           continue;
         }
         //matches: 'model ...
-        if (_scanner.scan(_model)) {
+        if (_scanner.scan(_type)) {
           var text = _scanTillEndOfStatement(_scanner);
-          tree.add(Token(TokenType.model, text));
+          tree.add(Token(TokenType.type, text));
           continue;
         }
         //matches: 'layout '...'
@@ -234,17 +234,16 @@ class DirkAST {
     StringBuffer result = StringBuffer();
     List<Token> imports =
         tree.where((el) => el.type == TokenType.$import).toList();
-    Token model = tree.firstWhere((el) => el.type == TokenType.model,
-        orElse: () => Token(TokenType.model, ""));
+    Token typeToken = tree.firstWhere((el) => el.type == TokenType.type,
+        orElse: () => Token(TokenType.type, ""));
     tree.removeWhere(
-        (el) => el.type == TokenType.$import || el.type == TokenType.model);
+        (el) => el.type == TokenType.$import || el.type == TokenType.type);
     Token layout = tree.firstWhere((el) => el.type == TokenType.layout,
         orElse: () => Token(TokenType.layout, ""));
-    tree.removeWhere(
-        (el) => el.type == TokenType.$import || el.type == TokenType.model);
+    tree.removeWhere((el) => el.type == TokenType.layout);
 
     //force String param for LayoutView
-    String modelType = _isLayout ? "String" : model.content;
+    String modelType = _isLayout ? "String" : typeToken.content;
     String layoutFunc =
         layout.content.isEmpty ? "LayoutView" : fileNameToView(layout.content);
 

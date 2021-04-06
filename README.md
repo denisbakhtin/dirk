@@ -40,7 +40,7 @@ Basically all code instructions begin with `@` symbol. To escape it, use double 
 
 `@layout layout_second;` tells the engine to use the `layout_second.dirk.html` as a layout for this view. If omitted, the default one is used instead.
 
-`@model TodoClass;` states that the type of the view model is `TodoClass` and it can be referenced in your code as a `model` variable.
+`@type TodoClass;` states that the type of the view model is `TodoClass` and it can be referenced in your code as a `model` variable.
 
 `@someObject.doSomeThing("abc")` is a simple expression. If the method returns `void`, use the complex expression.
 
