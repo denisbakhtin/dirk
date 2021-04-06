@@ -8,6 +8,7 @@ final RegExp _whitespace = RegExp(r'[ \n\r\t]+');
 final RegExp _whitespaceOnly = RegExp(r'^[ \n\r\t]+$');
 final RegExp _at = RegExp(r'@');
 final RegExp _import = RegExp(r'import[\s\t]+');
+final RegExp _layout = RegExp(r'layout[\s\t]+');
 final RegExp _model = RegExp(r'model[\s\t]+');
 final RegExp _if = RegExp(r'if[\s\t]*');
 final RegExp _ifCondition = RegExp(r'\(([^\n]+)\)[\s\t]*\{');
@@ -35,7 +36,7 @@ class DirkAST {
   }) {
     _isPartial = isPartial(fileName);
     _funcName = fileNameToView(fileName);
-    _isLayout = _funcName == "LayoutView";
+    _isLayout = _funcName.startsWith(RegExp("^Layout"));
   }
 
   String _scanTillEndOfStatement(SpanScanner scanner) {
@@ -114,6 +115,12 @@ class DirkAST {
         if (_scanner.scan(_model)) {
           var text = _scanTillEndOfStatement(_scanner);
           tree.add(Token(TokenType.model, text));
+          continue;
+        }
+        //matches: 'layout '...'
+        if (_scanner.scan(_layout)) {
+          var text = _scanTillEndOfStatement(_scanner);
+          tree.add(Token(TokenType.layout, text));
           continue;
         }
         //matches: if (...) {...} else {...}
@@ -231,13 +238,19 @@ class DirkAST {
         orElse: () => Token(TokenType.model, ""));
     tree.removeWhere(
         (el) => el.type == TokenType.$import || el.type == TokenType.model);
+    Token layout = tree.firstWhere((el) => el.type == TokenType.layout,
+        orElse: () => Token(TokenType.layout, ""));
+    tree.removeWhere(
+        (el) => el.type == TokenType.$import || el.type == TokenType.model);
 
     //force String param for LayoutView
     String modelType = _isLayout ? "String" : model.content;
+    String layoutFunc =
+        layout.content.isEmpty ? "LayoutView" : fileNameToView(layout.content);
 
     imports.forEach((el) => result.writeln(el));
     result.writeln("import 'package:dirk/sanitize.dart';");
-    if (modelType != '') {
+    if (modelType.isNotEmpty) {
       result.writeln(
           "String ${_funcName}($modelType model, {Map<String, dynamic> viewData = const {}}) {");
     } else {
@@ -256,10 +269,10 @@ class DirkAST {
 
     result.writeln(_isLayout || _isPartial
         ? "return res;"
-        : "return LayoutView(res, viewData: viewData);");
+        : "return ${layoutFunc}(res, viewData: viewData);");
     result.writeln("}");
 
-    //for LayoutView replace placeholder with model param
+    //for layout view replace placeholder with model param
     var res = _isLayout
         ? result
             .toString()

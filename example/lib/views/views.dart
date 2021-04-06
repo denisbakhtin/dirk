@@ -6,15 +6,16 @@ import 'package:dirk/sanitize.dart';
 String IndexView({Map<String, dynamic> viewData = const {}}) {
   String res = '';
   viewData = Map.from(viewData);
-  res += '''<h1>Product catalog</h1> <small>''';
+
+  res += ''' <h1>Product catalog</h1> <small>''';
   res += '''${sanitize((15 + 12).toString())}''';
   res += ''' quality items</small> <h5>We recommend</h5> ''';
   for (var i = 0; i < 5; i++) {
-    res += '''<p class="highlight">Impressive product ''';
+    res += ''' <p class="highlight">Impressive product ''';
     res += '''${sanitize(i + 1)}''';
     res += '''</p> ''';
   }
-  return LayoutView(res, viewData: viewData);
+  return LayoutTwoView(res, viewData: viewData);
 }
 
 String LayoutView(String model, {Map<String, dynamic> viewData = const {}}) {
@@ -28,6 +29,21 @@ String LayoutView(String model, {Map<String, dynamic> viewData = const {}}) {
   res += '''${model}''';
   res +=
       ''' </div> <footer class="page-footer"> All rights reserved 2021. </footer> </body> </html>''';
+  return res;
+}
+
+String LayoutTwoView(String model, {Map<String, dynamic> viewData = const {}}) {
+  String res = '';
+  viewData = Map.from(viewData);
+  res += '''<html> ''';
+  res +=
+      '''${PartialHeaderView("Really Awesome Website", viewData: viewData)}''';
+  res += ''' <body> ''';
+  res += '''${PartialSharedMenuView(viewData: viewData)}''';
+  res += ''' <div class="container"> ''';
+  res += '''${model}''';
+  res +=
+      ''' </div> <footer class="page-footer"> All rights reserved 2021. Updated template. </footer> </body> </html> ''';
   return res;
 }
 
@@ -55,11 +71,11 @@ String ShowView({Map<String, dynamic> viewData = const {}}) {
   print('Show Hello');
   res += ''' <ul> ''';
   for (var i = 0; i < 10; i++) {
-    res += '''<li> Product feature number ''';
+    res += ''' <li> Product feature number ''';
     res += '''${sanitize(i + 1)}''';
     res += '''. ''';
     if (i == 9) {
-      res += '''No one can resist. ''';
+      res += ''' No one can resist. ''';
     }
     res += ''' </li> ''';
   }

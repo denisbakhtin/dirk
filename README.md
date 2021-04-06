@@ -20,7 +20,8 @@ dev_dependencies:
 Normally `dirk` operates on a `lib/views` folder, this can be configured, but not tested. 
 There are some conventions: 
 - all views must have a `.dirk.html` extention
-- the main layout file should be named `layout.dirk.html` and contain a `@renderBody()` placeholder, where the rendered view will be inserted
+- the default layout file should be named `layout.dirk.html` and contain a `@renderBody()` placeholder, where the rendered view will be inserted
+- any alternative layout name must follow the pattern `layout*.dirk.html`
 - partial files must begin with `_` underscore
 
 For more info check the syntax section. Use the [example](https://github.com/denisbakhtin/dirk/tree/main/example) as a brief howto.
@@ -36,6 +37,8 @@ issue if you have a good suggestion.
 Basically all code instructions begin with `@` symbol. To escape it, use double `@@`, for example: `email@@gmail.com`.
 
 `@import 'dart:math';` tells the engine to import any available library or dart file.
+
+`@layout layout_second;` tells the engine to use the `layout_second.dirk.html` as a layout for this view. If omitted, the default one is used instead.
 
 `@model TodoClass;` states that the type of the view model is `TodoClass` and it can be referenced in your code as a `model` variable.
 
@@ -121,6 +124,6 @@ Some wording is totally wrong.
 
 ## To be done
 
-- ~~Error checks (unmatched braces, etc.)~~ **Done, but can be improved**
-- ~~Find a way to reference partials from a different subfolder (ex. placed in shared dir).~~ **Done.**
-- ~~Escape html & js code returned by expressions unless explicitely forced~~ **Done. All expressions are strictly sanitized. XSS shall not pass.**
+* More intelligent expression parsing to allow something like `@viewData['title'], now one has to use `@(viewData['title'])
+* Allow single `@` usage in text context
+* Multiple layout support
