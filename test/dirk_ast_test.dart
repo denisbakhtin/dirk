@@ -11,11 +11,9 @@ void main() {
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.$import);
     expect(ast.tree[0].content, "some_cool_lib");
-    expect(ast.tree[0].children, []);
 
     expect(ast.tree[1].type, TokenType.$import);
     expect(ast.tree[1].content, "another_cool_lib");
-    expect(ast.tree[1].children, []);
   });
 
   test('model', () {
@@ -25,11 +23,9 @@ void main() {
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.model);
     expect(ast.tree[0].content, "some_cool_model_type");
-    expect(ast.tree[0].children, []);
 
     expect(ast.tree[1].type, TokenType.model);
     expect(ast.tree[1].content, "another_cool_model_type");
-    expect(ast.tree[1].children, []);
   });
 
   test('if statement', () {
@@ -38,22 +34,27 @@ void main() {
 }
 @if (cond2 ) {
   then do
-}''', fileName: "index")..parse();
+}
+@if (cond3) {hello}''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.$if);
     expect(ast.tree[0].content, "cond");
     expect(ast.tree[0].children.length, 1);
     expect(ast.tree[0].children.first.type, TokenType.text);
-    expect(ast.tree[0].children.first.content, "then do something ");
-    expect(ast.tree[0].children.first.children, []);
+    expect(ast.tree[0].children.first.content.trim(), "then do something");
 
     expect(ast.tree[1].type, TokenType.$if);
     expect(ast.tree[1].content, "cond2");
     expect(ast.tree[1].children.length, 1);
     expect(ast.tree[1].children.first.type, TokenType.text);
-    expect(ast.tree[1].children.first.content, "then do ");
-    expect(ast.tree[1].children.first.children, []);
+    expect(ast.tree[1].children.first.content.trim(), "then do");
+
+    expect(ast.tree[2].type, TokenType.$if);
+    expect(ast.tree[2].content, "cond3");
+    expect(ast.tree[2].children.length, 1);
+    expect(ast.tree[2].children.first.type, TokenType.text);
+    expect(ast.tree[2].children.first.content.trim(), "hello");
   });
 
   test('if statement with else', () {
@@ -69,10 +70,10 @@ void main() {
     expect(ast.tree[0].content, "cond");
     expect(ast.tree[0].children.length, 1);
     expect(ast.tree[0].children.first.type, TokenType.text);
-    expect(ast.tree[0].children.first.content, "then do something ");
+    expect(ast.tree[0].children.first.content.trim(), "then do something");
     expect(ast.tree[0].childrenAlt.length, 1);
     expect(ast.tree[0].childrenAlt.first.type, TokenType.text);
-    expect(ast.tree[0].childrenAlt.first.content, "then do else ");
+    expect(ast.tree[0].childrenAlt.first.content.trim(), "then do else");
   });
 
   test('for statement', () {
@@ -88,15 +89,13 @@ void main() {
     expect(ast.tree[0].content, "cond");
     expect(ast.tree[0].children.length, 1);
     expect(ast.tree[0].children.first.type, TokenType.text);
-    expect(ast.tree[0].children.first.content, "do something ");
-    expect(ast.tree[0].children.first.children, []);
+    expect(ast.tree[0].children.first.content.trim(), "do something");
 
     expect(ast.tree[1].type, TokenType.$for);
     expect(ast.tree[1].content, "var i = 1; i < 10; i++");
     expect(ast.tree[1].children.length, 1);
     expect(ast.tree[1].children.first.type, TokenType.text);
-    expect(ast.tree[1].children.first.content, "do more ");
-    expect(ast.tree[1].children.first.children, []);
+    expect(ast.tree[1].children.first.content.trim(), "do more");
   });
 
   test('block statement', () {
@@ -107,12 +106,10 @@ void main() {
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.block);
-    expect(ast.tree[0].content, "do something");
-    expect(ast.tree[0].children.length, 0);
+    expect(ast.tree[0].content.trim(), "do something");
 
     expect(ast.tree[1].type, TokenType.block);
-    expect(ast.tree[1].content, "do more");
-    expect(ast.tree[1].children.length, 0);
+    expect(ast.tree[1].content.trim(), "do more");
   });
 
   test('complex expression', () {
@@ -121,12 +118,10 @@ void main() {
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.expression);
-    expect(ast.tree[0].content, "do something");
-    expect(ast.tree[0].children.length, 0);
+    expect(ast.tree[0].content.trim(), "do something");
 
     expect(ast.tree[1].type, TokenType.expression);
-    expect(ast.tree[1].content, "do more");
-    expect(ast.tree[1].children.length, 0);
+    expect(ast.tree[1].content.trim(), "do more");
   });
 
   test('expression', () {
@@ -136,15 +131,12 @@ void main() {
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.expression);
     expect(ast.tree[0].content, "do");
-    expect(ast.tree[0].children.length, 0);
 
     expect(ast.tree[1].type, TokenType.text);
-    expect(ast.tree[1].content, " something ");
-    expect(ast.tree[1].children.length, 0);
+    expect(ast.tree[1].content.trim(), "something");
 
     expect(ast.tree[2].type, TokenType.expression);
     expect(ast.tree[2].content, "more.do()");
-    expect(ast.tree[2].children.length, 0);
   });
 
   test('plain text', () {
@@ -154,7 +146,6 @@ void main() {
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.text);
     expect(ast.tree[0].content, "<h1>Title text</h1> <p>Paragraph</p>");
-    expect(ast.tree[0].children.length, 0);
   });
 
   test('mixed markup', () {
@@ -191,40 +182,38 @@ my@@email.com''', fileName: "index")..parse();
 
     //some whitespaces here and there are ok at moment
     expect(ast.tree[2].type, TokenType.text);
-    expect(ast.tree[2].content, " <h1>Title text</h1> ");
+    expect(ast.tree[2].content.trim(), "<h1>Title text</h1>");
 
     expect(ast.tree[3].type, TokenType.expression);
     expect(ast.tree[3].content, "Model.execute()");
 
     expect(ast.tree[4].type, TokenType.text);
-    expect(ast.tree[4].content, " <p>Some text</p> ");
+    expect(ast.tree[4].content.trim(), "<p>Some text</p>");
 
     expect(ast.tree[5].type, TokenType.block);
     expect(ast.tree[5].content, "var m = 1;");
     expect(ast.tree[5].children.length, 0);
 
     expect(ast.tree[6].type, TokenType.text);
-    expect(ast.tree[6].content, " <p>Another text</p> ");
+    expect(ast.tree[6].content.trim(), "<p>Another text</p>");
 
     expect(ast.tree[7].type, TokenType.$for);
     expect(ast.tree[7].content, "var i = 1; i < 10; i++");
     expect(ast.tree[7].children.length, 2);
     expect(ast.tree[7].children[0].type, TokenType.text);
-    expect(ast.tree[7].children[0].content, "do more ");
-    expect(ast.tree[7].children[0].children, []);
+    expect(ast.tree[7].children[0].content.trim(), "do more");
     expect(ast.tree[7].children[1].type, TokenType.$if);
     expect(ast.tree[7].children[1].content, "new_cond");
     expect(ast.tree[7].children[1].children.length, 1);
     expect(ast.tree[7].children[1].children[0].type, TokenType.text);
-    expect(ast.tree[7].children[1].children[0].content,
-        "nothing to write home about ");
+    expect(ast.tree[7].children[1].children[0].content.trim(),
+        "nothing to write home about");
 
     expect(ast.tree[8].type, TokenType.$if);
     expect(ast.tree[8].content, "cond");
     expect(ast.tree[8].children.length, 1);
     expect(ast.tree[8].children.first.type, TokenType.text);
-    expect(ast.tree[8].children.first.content, "then do something ");
-    expect(ast.tree[8].children.first.children, []);
+    expect(ast.tree[8].children.first.content.trim(), "then do something");
 
     expect(ast.tree[9].type, TokenType.text);
     expect(ast.tree[9].content, " my@email.com");
@@ -240,7 +229,7 @@ my@@email.com''', fileName: "index")..parse();
 
     expect(ast.errors.length, 0);
     expect(ast.tree[0].type, TokenType.text);
-    expect(ast.tree[0].content, "<html> <body> Sparta this is! ");
+    expect(ast.tree[0].content.trim(), "<html> <body> Sparta this is!");
   });
 
   test('@renderPartial works in any view/layout', () {
