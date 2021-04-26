@@ -126,3 +126,4 @@ Some wording is totally wrong.
 
 * More intelligent expression parsing to allow something like `@viewData['title'], now one has to use `@(viewData['title'])
 * Allow single `@` usage in text context
+* Add comments
